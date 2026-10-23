@@ -81,6 +81,15 @@ class WildcardDict(dict):
         if key[-1] == '*':
             self.star_keys.add(key[:-1])
 
+    def __delitem__(self, key):
+        """Delete an item and keep the wildcard lookup indices in sync."""
+        super(WildcardDict, self).__delitem__(key)
+
+        if key[-1] == '+':
+            self.plus_keys.discard(key[:-1])
+        if key[-1] == '*':
+            self.star_keys.discard(key[:-1])
+
     def query_path(self, key):
         """Return the key (path) that matches the queried key.
 
